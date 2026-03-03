@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Star Twister</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #0b0b0f;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        #app {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 36px;
+            padding: 16px 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .profile-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            background: rgba(44, 44, 48, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 16px 8px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2a2a2e, #1c1c1e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ffd60a;
+            border: 2px solid #ffd60a;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .balance-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance {
+            background: rgba(10, 132, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(10, 132, 255, 0.4);
+        }
+
+        .balance i {
+            font-size: 16px;
+            color: gold;
+        }
+
+        .buy-btn {
+            background: #0a84ff;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 15px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(10, 132, 255, 0.4);
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .buy-btn:active {
+            transform: scale(0.94);
+            opacity: 0.8;
+        }
+
+        .referral-panel {
+            margin: 16px 0;
+            background: rgba(28, 28, 30, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px;
+            border-radius: 40px;
+            display: flex;
+            gap: 8px;
+            border: 1px solid #3a3a3c;
+        }
+
+        .referral-panel input {
+            flex: 1;
+            background: #1c1c1e;
+            border: 1px solid #3a3a3c;
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .referral-panel input::placeholder {
+            color: #8e8e93;
+        }
+
+        .referral-panel button {
+            background: #0a84ff;
+            border: none;
+            border-radius: 30px;
+            padding: 0 24px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .referral-panel button:active {
+            opacity: 0.8;
+        }
+
+        .wheel-horizontal {
+            margin: 24px 0 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 40px;
+            padding: 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gift-strip-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 140px;
+            mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+        }
+
+        #giftStrip {
+            display: flex;
+            gap: 12px;
+            position: absolute;
+            left: 0;
+            will-change: transform;
+            transition: transform 0.05s linear;
+            padding: 0 20px;
+        }
+
+        .gift-item {
+            flex: 0 0 100px;
+            height: 130px;
+            background: rgba(30, 30, 35, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 12px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            transition: border-color 0.2s;
+            position: relative;
+        }
+
+        .gift-item.selected {
+            border-color: #ffd60a;
+            box-shadow: 0 0 20px #ffd60a;
+        }
+
+        .gift-common { border-color: #8e8e93; }
+        .gift-rare { border-color: #0a84ff; }
+        .gift-epic { border-color: #bf5af2; }
+        .gift-legendary { border-color: #ffd60a; }
+
+        .gift-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            background: #2c2c2e;
+            object-fit: cover;
+            margin-top: 8px;
+        }
+
+        .gift-name {
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90px;
+        }
+
+        .gift-price-ton {
+            font-size: 12px;
+            background: #0a84ff;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        .pointer-line {
+            width: 4px;
+            height: 150px;
+            background: #ffd60a;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+            box-shadow: 0 0 16px gold;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 12px;        
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 15px;             
+            white-space: nowrap;       
+            cursor: pointer;
+            background: #2c2c2e;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            transition: 0.15s;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background: #0a84ff;
+        }
+
+        .btn-secondary {
+            background: #32d74b;
+        }
+
+        .btn:disabled {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        #freeSpinBtn {
+            background: #bf5af2;
+        }
+
+        .history-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0 12px;
+            color: #8e8e93;
+            font-weight: 600;
+        }
+
+        .history-list {
+            background: rgba(28, 28, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #2c2c2e;
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1.2fr;
+            padding: 12px 8px;
+            border-bottom: 1px solid #3a3a3c;
+            font-size: 13px;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-status {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .status-вналичии {
+            color: #30d158;
+        }
+
+        .status-продан {
+            color: #ff9f0a;
+        }
+
+        .status-выводится {
+            color: #0a84ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 200;
+            backdrop-filter: blur(12px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1c1c1e;
+            border-radius: 40px;
+            padding: 28px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #3a3a3c;
+            box-shadow: 0 30px 40px black;
+        }
+
+        .gift-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .gift-card .gift-image-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 30px;
+            background: #2c2c2e;
+            object-fit: cover;
+        }
+
+        .gift-name-big {
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .gift-desc {
+            color: #8e8e93;
+            text-align: center;
+        }
+
+        .gift-price-big {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffd60a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .price-ton {
+            font-size: 20px;
+        }
+
+        .price-rub {
+            font-size: 16px;
+            color: #8e8e93;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 24px 0 12px;
+        }
+
+        .withdraw-option {
+            background: #2c2c2e;
+            border-radius: 28px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: 1px solid #3a3a3c;
+            transition: 0.2s;
+        }
+
+        .withdraw-option:hover {
+            background: #3a3a3c;
+        }
+
+        .withdraw-option h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .withdraw-option p {
+            color: #8e8e93;
+            font-size: 14px;
+        }
+
+        .withdraw-panel {
+            margin-top: 16px;
+            padding: 16px;
+            background: #2c2c2e;
+            border-radius: 28px;
+        }
+
+        .withdraw-code {
+            background: #0a0a0c;
+            padding: 16px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: center;
+            margin: 16px 0;
+            letter-spacing: 1px;
+            word-break: break-all;
+            border: 1px dashed #ffd60a;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .withdraw-code:hover {
+            background: #1c1c1e;
+        }
+
+        .support-form input {
+            width: 100%;
+            background: #3a3a3c;
+            border: none;
+            border-radius: 30px;
+            padding: 16px;
+            color: white;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="profile-bar">
+        <div class="user-info">
+            <div class="avatar" id="avatar"></div>
+            <span class="username" id="username">Загрузка...</span>
+        </div>
+        <div class="balance-wrapper">
+            <div class="balance" id="balance"><i class="fas fa-star"></i> 0</div>
+            <button class="buy-btn" onclick="window.open('https://t.me/StarTwisterShopBot', '_blank')"><i class="fas fa-shopping-cart"></i> Купить</button>
+        </div>
+    </div>
+
+    <div class="referral-panel">
+        <input type="text" id="referralCode" placeholder="Ввести реферальный код">
+        <button id="applyReferral"><i class="fas fa-check"></i></button>
+    </div>
+
+    <div class="wheel-horizontal">
+        <div class="gift-strip-container">
+            <div id="giftStrip"></div>
+            <div class="pointer-line"></div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-primary" id="spinStarsBtn"><i class="fas fa-sync-alt"></i> Крутить 1 <i class="fas fa-star"></i></button>
+        <button class="btn" id="freeSpinBtn" disabled><i class="fas fa-gift"></i> Бесплатно</button>
+    </div>
+
+    <div class="history-title">
+        <span><i class="fas fa-history"></i> История</span>
+    </div>
+    <div class="history-list" id="historyList"></div>
+
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <div class="gift-card" id="resultGiftCard"></div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="sellBtn"><i class="fas fa-dollar-sign"></i> Продать</button>
+                <button class="btn" id="withdrawBtn"><i class="fas fa-download"></i> Вывести</button>
+            </div>
+            <button class="btn" onclick="closeResultModal()"><i class="fas fa-times"></i> Закрыть</button>
+        </div>
+    </div>
+
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-download"></i> Вывод подарка</h2>
+            
+            <div class="withdraw-option" id="withdrawBotOption">
+                <h3><i class="fas fa-robot"></i> Через бота (5 мин)</h3>
+                <p>Мгновенная генерация уникальной ссылки. После перехода в бота подарок будет отправлен вам.</p>
+            </div>
+            
+            <div class="withdraw-option" id="withdrawSupportOption">
+                <h3><i class="fas fa-headset"></i> Через техподдержку (до 7 дней)</h3>
+                <p>Обработка запроса вручную. Пожалуйста, не меняйте username</p>
+            </div>
+
+            <div id="withdrawBotPanel" class="withdraw-panel" style="display: none;">
+                <h4><i class="fas fa-lock"></i> Зашифрованная ссылка</h4>
+                <div class="withdraw-code" id="withdrawCode" title="Нажмите, чтобы скопировать"></div>
+                <p style="color: #8e8e93; font-size: 12px; margin-top: 8px;">Нажмите на код, чтобы скопировать. Затем вставьте в бота для получения подарка.<br><span style="font-size:10px;">Данный код зашифрован, он нужен нам, чтобы мы правильно определили подарок</span></p>
+                <a href="https://t.me/StarTwisterWithdrawBot" target="_blank" class="btn btn-primary" style="text-align:center; margin-top:12px;"><i class="fas fa-external-link-alt"></i> Перейти в бота</a>
+            </div>
+
+            <div id="supportFormPanel" class="withdraw-panel" style="display: none;">
+                <h4><i class="fas fa-envelope"></i> Заявка в поддержку</h4>
+                <div class="support-form">
+                    <input type="text" id="supportUsername" readonly>
+                    <p style="color: #8e8e93; font-size: 12px; margin: 8px 0;">Наш менеджер свяжется с вами в течение 7 дней. Проверьте, что вам могут бесплатно писать незнакомцы</p>
+                    <button class="btn btn-primary" onclick="sendSupportRequest()"><i class="fas fa-paper-plane"></i> Отправить</button>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top:16px;" onclick="closeWithdrawModal()"><i class="fas fa-arrow-left"></i> Назад</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const tg = window.Telegram?.WebApp || { 
+            initDataUnsafe: { user: { first_name: 'Игрок', username: '@player' } }
+        };
+        if (tg.ready) tg.ready();
+        const user = tg.initDataUnsafe.user || { first_name: 'Гость', username: '@guest' };
+        document.getElementById('username').innerText = user.first_name || user.username;
+        const avatarDiv = document.getElementById('avatar');
+        avatarDiv.innerText = user.first_name ? user.first_name[0].toUpperCase() : '?';
+
+        const allGifts = [
+            { id: 1, name: 'Pet Snake', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/rwS4cbpb/Bez-nazvania141-20260302224345.jpg', desc: 'Домашняя змея', encryptedUrl: btoa('t.me/nft/PetSnake-74731') },
+            { id: 2, name: 'Instant Ramen', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/Ghn43rfB/Bez-nazvania141-20260302013354.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-271878') },
+            { id: 3, name: 'Tama Gadget', priceTON: 12, priceRUB: 1125, rarity: 'epic', image: 'https://i.postimg.cc/hj9P6J1Q/Bez-nazvania141-20260302225039.jpg', desc: 'Тамагочи', encryptedUrl: btoa('t.me/nft/TamaGadget-57653') },
+            { id: 4, name: 'Homemade Cake', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/QxrsvxFk/Bez-nazvania141-20260302230958.jpg', desc: 'Домашний пирог', encryptedUrl: btoa('t.me/nft/HomemadeCake-72304') },
+            { id: 5, name: 'Whip Cupcake', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/DZ4VSRMy/Bez-nazvania141-20260302233926.jpg', desc: 'Кекс', encryptedUrl: btoa('t.me/nft/WhipCupcake-235234') },
+            { id: 6, name: 'Fresh Socks', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/KcQ7K4tc/Bez-nazvania141-20260302234317.jpg', desc: 'Свежие носки', encryptedUrl: btoa('t.me/nft/FreshSocks-32835') },
+            { id: 7, name: 'Pretty Posy', priceTON: 9, priceRUB: 844, rarity: 'rare', image: 'https://i.postimg.cc/mk6RbhWy/Bez-nazvania141-20260303135732.jpg', desc: 'Симпатичный букет', encryptedUrl: btoa('t.me/nft/PrettyPosy-103707') },
+            { id: 8, name: 'Ice Cream', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/GtSBZcMJ/Bez-nazvania141-20260303140647.jpg', desc: 'Мороженое', encryptedUrl: btoa('t.me/nft/IceCream-175253') },
+            { id: 9, name: 'Jester Hat', priceTON: 15, priceRUB: 1407, rarity: 'epic', image: 'https://i.postimg.cc/SsYCkYMT/Screenshot-20260303-141822.png', desc: 'Шутовская шляпа', encryptedUrl: btoa('t.me/nft/JesterHat-70359') },
+            { id: 10, name: 'Spring Basket', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/9MmKkVwR/Bez-nazvania141-20260303142629.jpg', desc: 'Пружинная корзина', encryptedUrl: btoa('t.me/nft/SpringBasket-45268') },
+            { id: 11, name: 'BDay Candle', priceTON: 6, priceRUB: 562, rarity: 'rare', image: 'https://i.postimg.cc/QMZG1bv5/Bez-nazvania141-20260303173358.jpg', desc: 'Свеча на день рождения', encryptedUrl: btoa('t.me/nft/BDayCandle-177607') },
+            { id: 12, name: 'Faith Amulet', priceTON: 10, priceRUB: 938, rarity: 'epic', image: 'https://i.postimg.cc/wMy0WKmf/Bez-nazvania141-20260303173719.jpg', desc: 'Амулет веры', encryptedUrl: btoa('t.me/nft/FaithAmulet-131') },
+            { id: 13, name: 'Candy Cane', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/C1yGFZBm/Bez-nazvania141-20260303174220.jpg', desc: 'Карамельная трость', encryptedUrl: btoa('t.me/nft/CandyCane-69627') },
+            { id: 14, name: 'Instant Ramen', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/598V9DGm/Bez-nazvania141-20260303175116.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-363195') },
+            { id: 15, name: 'Jolly Chimp', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/MG1Dfb8n/Bez-nazvania141-20260303175440.jpg', desc: 'Веселый шимпанзе', encryptedUrl: btoa('t.me/nft/JollyChimp-14158') }
+        ];
+
+        function getRandomGifts(count) {
+            const shuffled = [...allGifts].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        let gifts = getRandomGifts(10);
+        let balance = 0;
+        let freeSpinAvailable = false;
+        let freeSpinUsed = false;
+        let history = [];
+        let currentGift = null;
+
+        const strip = document.getElementById('giftStrip');
+        function renderStrip() {
+            strip.innerHTML = '';
+            gifts.forEach(g => {
+                const div = document.createElement('div');
+                div.className = `gift-item gift-${g.rarity}`;
+                div.dataset.id = g.id;
+                div.innerHTML = `
+                    <img src="${g.image}" class="gift-image" onerror="this.src='https://picsum.photos/200/200'">
+                    <div class="gift-name">${g.name}</div>
+                    <div class="gift-price-ton">${g.priceTON} TON</div>
+                `;
+                strip.appendChild(div);
+            });
+        }
+        renderStrip();
+
+        function copyTextToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => alert('Код скопирован!'))
+                    .catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try { document.execCommand('copy'); alert('Код скопирован!'); } 
+            catch { alert('Не удалось скопировать'); }
+            document.body.removeChild(textarea);
+        }
+
+        let animFrame;
+        let position = 0;
+        let velocity = 0;
+        let spinning = false;
+        const itemOuterWidth = 112;
+        const totalWidth = gifts.length * itemOuterWidth - 12;
+
+        function getSelectedGift() {
+            const items = document.querySelectorAll('.gift-item');
+            const container = document.querySelector('.gift-strip-container');
+            const containerRect = container.getBoundingClientRect();
+            const pointerX = containerRect.left + containerRect.width / 2;
+            let minDist = Infinity;
+            let selectedIndex = 0;
+            items.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                const itemCenter = rect.left + rect.width / 2;
+                const dist = Math.abs(itemCenter - pointerX);
+                if (dist < minDist) {
+                    minDist = dist;
+                    selectedIndex = index;
+                }
+            });
+            return gifts[selectedIndex];
+        }
+
+        function spinWheel(callback) {
+            if (spinning) return;
+            spinning = true;
+            velocity = 42;
+            const startTime = performance.now();
+
+            function animate() {
+                velocity *= 0.987;
+                position += velocity;
+                if (position > totalWidth) position -= totalWidth;
+                if (position < 0) position += totalWidth;
+                strip.style.transform = `translateX(${-position}px)`;
+
+                const elapsed = performance.now() - startTime;
+                if (elapsed < 6500 && velocity > 0.2) {
+                    animFrame = requestAnimationFrame(animate);
+                } else {
+                    spinning = false;
+                    cancelAnimationFrame(animFrame);
+                    const selected = getSelectedGift();
+                    document.querySelectorAll('.gift-item').forEach(el => el.classList.remove('selected'));
+                    const items = document.querySelectorAll('.gift-item');
+                    const idx = gifts.findIndex(g => g.id === selected.id);
+                    if (items[idx]) items[idx].classList.add('selected');
+                    if (callback) callback(selected);
+                }
+            }
+            animFrame = requestAnimationFrame(animate);
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').innerHTML = `<i class="fas fa-star"></i> ${balance}`;
+        }
+
+        function addHistory(gift, status) {
+            const entryId = Date.now() + Math.random();
+            const date = new Date().toLocaleString('ru', { hour: '2-digit', minute: '2-digit' });
+            const entry = { id: entryId, giftId: gift.id, name: gift.name, date, status };
+            history.unshift(entry);
+            renderHistory();
+            return entryId;
+        }
+
+        function updateHistoryStatus(entryId, newStatus) {
+            const entry = history.find(h => h.id === entryId);
+            if (entry) entry.status = newStatus;
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const cont = document.getElementById('historyList');
+            cont.innerHTML = '';
+            history.slice(0, 15).forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `<span>${h.date}</span><span>${h.name}</span><span class="history-status status-${h.status.replace(' ','')}">${h.status}</span>`;
+                cont.appendChild(div);
+            });
+        }
+
+        function showResultModal(gift, source) {
+            const entryId = addHistory(gift, 'в наличии');
+            currentGift = { ...gift, source, entryId };
+            const card = document.getElementById('resultGiftCard');
+            card.innerHTML = `
+                <img src="${gift.image}" class="gift-image-large" onerror="this.src='https://picsum.photos/200/200'">
+                <div class="gift-name-big">${gift.name}</div>
+                <div class="gift-desc">${gift.desc}</div>
+                <div class="gift-price-big">
+                    <span class="price-ton">${gift.priceTON} TON</span>
+                    <span class="price-rub">≈ ${gift.priceRUB} ₽</span>
+                </div>
+            `;
+            document.getElementById('sellBtn').disabled = (source === 'free');
+            document.getElementById('resultModal').classList.add('active');
+        }
+
+        window.closeResultModal = () => document.getElementById('resultModal').classList.remove('active');
+
+        document.getElementById('spinStarsBtn').addEventListener('click', () => {
+            if (balance < 1) { alert('Купите звёзды через наш бот'); return; }
+            balance -= 1;
+            updateBalance();
+            spinWheel((gift) => showResultModal(gift, 'stars'));
+        });
+
+        document.getElementById('freeSpinBtn').addEventListener('click', () => {
+            if (!freeSpinAvailable || freeSpinUsed) return;
+            freeSpinUsed = true;
+            freeSpinAvailable = false;
+            document.getElementById('freeSpinBtn').disabled = true;
+            spinWheel((gift) => showResultModal(gift, 'free'));
+        });
+
+        document.getElementById('applyReferral').addEventListener('click', () => {
+            const code = document.getElementById('referralCode').value.trim();
+            if (code === 'FreeSpin' && !freeSpinAvailable && !freeSpinUsed) {
+                freeSpinAvailable = true;
+                document.getElementById('freeSpinBtn').disabled = false;
+                alert('Бесплатный спин активирован!');
+            } else if (code !== 'FreeSpin') {
+                alert('Неверный код');
+            } else if (freeSpinUsed) {
+                alert('Вы уже использовали бесплатный спин');
+            }
+        });
+
+        document.getElementById('sellBtn').addEventListener('click', () => {
+            if (!currentGift) return;
+            if (currentGift.source === 'free') { alert('Нельзя продать (бесплатный)'); return; }
+            balance += currentGift.priceTON;
+            updateBalance();
+            updateHistoryStatus(currentGift.entryId, 'продан');
+            closeResultModal();
+        });
+
+        const withdrawModal = document.getElementById('withdrawModal');
+        const botPanel = document.getElementById('withdrawBotPanel');
+        const supportPanel = document.getElementById('supportFormPanel');
+        const withdrawCodeDiv = document.getElementById('withdrawCode');
+
+        document.getElementById('withdrawBtn').addEventListener('click', () => {
+            closeResultModal();
+            botPanel.style.display = 'none';
+            supportPanel.style.display = 'none';
+            withdrawModal.classList.add('active');
+        });
+
+        document.getElementById('withdrawBotOption').addEventListener('click', () => {
+            supportPanel.style.display = 'none';
+            if (currentGift) {
+                withdrawCodeDiv.innerText = currentGift.encryptedUrl;
+                botPanel.style.display = 'block';
+                updateHistoryStatus(currentGift.entryId, 'выводится');
+            }
+        });
+
+        withdrawCodeDiv.addEventListener('click', () => copyTextToClipboard(withdrawCodeDiv.innerText));
+
+        document.getElementById('withdrawSupportOption').addEventListener('click', () => {
+            botPanel.style.display = 'none';
+            document.getElementById('supportUsername').value = user.username || 'user';
+            supportPanel.style.display = 'block';
+            updateHistoryStatus(currentGift.entryId, 'выводится');
+        });
+
+        window.closeWithdrawModal = () => withdrawModal.classList.remove('active');
+
+        window.sendSupportRequest = () => { 
+            alert('Запрос отправлен в поддержку'); 
+            closeWithdrawModal(); 
+        };
+
+        updateBalance();
+        renderHistory();
+    })();
+</script>
+</body>
+</html>
