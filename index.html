@@ -579,265 +579,284 @@
 </div>
 
 <script>
-    (function() {
-        const tg = window.Telegram?.WebApp || { 
-            initDataUnsafe: { user: { first_name: 'Игрок', username: '@player' } }
-        };
-        if (tg.ready) tg.ready();
-        const user = tg.initDataUnsafe.user || { first_name: 'Гость', username: '@guest' };
-        document.getElementById('username').innerText = user.first_name || user.username;
-        const avatarDiv = document.getElementById('avatar');
+(function() {
+    const tg = window.Telegram?.WebApp || { 
+        initDataUnsafe: { user: { id: 12345, first_name: 'Игрок', username: '@player', photo_url: '' } }
+    };
+    if (tg.ready) tg.ready();
+    const user = tg.initDataUnsafe.user || { id: 0, first_name: 'Гость', username: '@guest', photo_url: '' };
+    
+    document.getElementById('username').innerText = user.first_name || user.username;
+    const avatarDiv = document.getElementById('avatar');
+    if (user.photo_url) {
+        avatarDiv.innerHTML = `<img src="${user.photo_url}" alt="avatar">`;
+    } else {
         avatarDiv.innerText = user.first_name ? user.first_name[0].toUpperCase() : '?';
+    }
 
-        const allGifts = [
-            { id: 1, name: 'Pet Snake', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/rwS4cbpb/Bez-nazvania141-20260302224345.jpg', desc: 'Домашняя змея', encryptedUrl: btoa('t.me/nft/PetSnake-74731') },
-            { id: 2, name: 'Instant Ramen', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/Ghn43rfB/Bez-nazvania141-20260302013354.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-271878') },
-            { id: 3, name: 'Tama Gadget', priceTON: 12, priceRUB: 1125, rarity: 'epic', image: 'https://i.postimg.cc/hj9P6J1Q/Bez-nazvania141-20260302225039.jpg', desc: 'Тамагочи', encryptedUrl: btoa('t.me/nft/TamaGadget-57653') },
-            { id: 4, name: 'Homemade Cake', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/QxrsvxFk/Bez-nazvania141-20260302230958.jpg', desc: 'Домашний пирог', encryptedUrl: btoa('t.me/nft/HomemadeCake-72304') },
-            { id: 5, name: 'Whip Cupcake', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/DZ4VSRMy/Bez-nazvania141-20260302233926.jpg', desc: 'Кекс', encryptedUrl: btoa('t.me/nft/WhipCupcake-235234') },
-            { id: 6, name: 'Fresh Socks', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/KcQ7K4tc/Bez-nazvania141-20260302234317.jpg', desc: 'Свежие носки', encryptedUrl: btoa('t.me/nft/FreshSocks-32835') },
-            { id: 7, name: 'Pretty Posy', priceTON: 9, priceRUB: 844, rarity: 'rare', image: 'https://i.postimg.cc/mk6RbhWy/Bez-nazvania141-20260303135732.jpg', desc: 'Симпатичный букет', encryptedUrl: btoa('t.me/nft/PrettyPosy-103707') },
-            { id: 8, name: 'Ice Cream', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/GtSBZcMJ/Bez-nazvania141-20260303140647.jpg', desc: 'Мороженое', encryptedUrl: btoa('t.me/nft/IceCream-175253') },
-            { id: 9, name: 'Jester Hat', priceTON: 15, priceRUB: 1407, rarity: 'epic', image: 'https://i.postimg.cc/SsYCkYMT/Screenshot-20260303-141822.png', desc: 'Шутовская шляпа', encryptedUrl: btoa('t.me/nft/JesterHat-70359') },
-            { id: 10, name: 'Spring Basket', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/9MmKkVwR/Bez-nazvania141-20260303142629.jpg', desc: 'Пружинная корзина', encryptedUrl: btoa('t.me/nft/SpringBasket-45268') },
-            { id: 11, name: 'BDay Candle', priceTON: 6, priceRUB: 562, rarity: 'rare', image: 'https://i.postimg.cc/QMZG1bv5/Bez-nazvania141-20260303173358.jpg', desc: 'Свеча на день рождения', encryptedUrl: btoa('t.me/nft/BDayCandle-177607') },
-            { id: 12, name: 'Faith Amulet', priceTON: 10, priceRUB: 938, rarity: 'epic', image: 'https://i.postimg.cc/wMy0WKmf/Bez-nazvania141-20260303173719.jpg', desc: 'Амулет веры', encryptedUrl: btoa('t.me/nft/FaithAmulet-131') },
-            { id: 13, name: 'Candy Cane', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/C1yGFZBm/Bez-nazvania141-20260303174220.jpg', desc: 'Карамельная трость', encryptedUrl: btoa('t.me/nft/CandyCane-69627') },
-            { id: 14, name: 'Instant Ramen', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/598V9DGm/Bez-nazvania141-20260303175116.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-363195') },
-            { id: 15, name: 'Jolly Chimp', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/MG1Dfb8n/Bez-nazvania141-20260303175440.jpg', desc: 'Веселый шимпанзе', encryptedUrl: btoa('t.me/nft/JollyChimp-14158') }
-        ];
+    const userId = user.id || 'guest';
+    const storageKey = (key) => `startwister_${userId}_${key}`;
+    const getStored = (key, def) => {
+        try { return JSON.parse(localStorage.getItem(storageKey(key))) ?? def; } 
+        catch { return def; }
+    };
+    const setStored = (key, val) => localStorage.setItem(storageKey(key), JSON.stringify(val));
 
-        function getRandomGifts(count) {
-            const shuffled = [...allGifts].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
-        }
+    const allGifts = [
+        { id: 1, name: 'Pet Snake', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/rwS4cbpb/Bez-nazvania141-20260302224345.jpg', desc: 'Домашняя змея', encryptedUrl: btoa('t.me/nft/PetSnake-74731') },
+        { id: 2, name: 'Instant Ramen', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/Ghn43rfB/Bez-nazvania141-20260302013354.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-271878') },
+        { id: 3, name: 'Tama Gadget', priceTON: 12, priceRUB: 1125, rarity: 'epic', image: 'https://i.postimg.cc/hj9P6J1Q/Bez-nazvania141-20260302225039.jpg', desc: 'Тамагочи', encryptedUrl: btoa('t.me/nft/TamaGadget-57653') },
+        { id: 4, name: 'Homemade Cake', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/QxrsvxFk/Bez-nazvania141-20260302230958.jpg', desc: 'Домашний пирог', encryptedUrl: btoa('t.me/nft/HomemadeCake-72304') },
+        { id: 5, name: 'Whip Cupcake', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/DZ4VSRMy/Bez-nazvania141-20260302233926.jpg', desc: 'Кекс', encryptedUrl: btoa('t.me/nft/WhipCupcake-235234') },
+        { id: 6, name: 'Fresh Socks', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/KcQ7K4tc/Bez-nazvania141-20260302234317.jpg', desc: 'Свежие носки', encryptedUrl: btoa('t.me/nft/FreshSocks-32835') },
+        { id: 7, name: 'Pretty Posy', priceTON: 9, priceRUB: 844, rarity: 'rare', image: 'https://i.postimg.cc/mk6RbhWy/Bez-nazvania141-20260303135732.jpg', desc: 'Симпатичный букет', encryptedUrl: btoa('t.me/nft/PrettyPosy-103707') },
+        { id: 8, name: 'Ice Cream', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/GtSBZcMJ/Bez-nazvania141-20260303140647.jpg', desc: 'Мороженое', encryptedUrl: btoa('t.me/nft/IceCream-175253') },
+        { id: 9, name: 'Jester Hat', priceTON: 15, priceRUB: 1407, rarity: 'epic', image: 'https://i.postimg.cc/SsYCkYMT/Screenshot-20260303-141822.png', desc: 'Шутовская шляпа', encryptedUrl: btoa('t.me/nft/JesterHat-70359') },
+        { id: 10, name: 'Spring Basket', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/9MmKkVwR/Bez-nazvania141-20260303142629.jpg', desc: 'Пружинная корзина', encryptedUrl: btoa('t.me/nft/SpringBasket-45268') },
+        { id: 11, name: 'BDay Candle', priceTON: 6, priceRUB: 562, rarity: 'rare', image: 'https://i.postimg.cc/QMZG1bv5/Bez-nazvania141-20260303173358.jpg', desc: 'Свеча на день рождения', encryptedUrl: btoa('t.me/nft/BDayCandle-177607') },
+        { id: 12, name: 'Faith Amulet', priceTON: 10, priceRUB: 938, rarity: 'epic', image: 'https://i.postimg.cc/wMy0WKmf/Bez-nazvania141-20260303173719.jpg', desc: 'Амулет веры', encryptedUrl: btoa('t.me/nft/FaithAmulet-131') },
+        { id: 13, name: 'Candy Cane', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/C1yGFZBm/Bez-nazvania141-20260303174220.jpg', desc: 'Карамельная трость', encryptedUrl: btoa('t.me/nft/CandyCane-69627') },
+        { id: 14, name: 'Instant Ramen', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/598V9DGm/Bez-nazvania141-20260303175116.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-363195') },
+        { id: 15, name: 'Jolly Chimp', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/MG1Dfb8n/Bez-nazvania141-20260303175440.jpg', desc: 'Веселый шимпанзе', encryptedUrl: btoa('t.me/nft/JollyChimp-14158') }
+    ];
 
-        let gifts = getRandomGifts(10);
-        let balance = 0;
-        let freeSpinAvailable = false;
-        let freeSpinUsed = false;
-        let history = [];
-        let currentGift = null;
+    function getRandomGifts(count) {
+        const shuffled = [...allGifts].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
 
-        const strip = document.getElementById('giftStrip');
-        function renderStrip() {
-            strip.innerHTML = '';
-            gifts.forEach(g => {
-                const div = document.createElement('div');
-                div.className = `gift-item gift-${g.rarity}`;
-                div.dataset.id = g.id;
-                div.innerHTML = `
-                    <img src="${g.image}" class="gift-image" onerror="this.src='https://picsum.photos/200/200'">
-                    <div class="gift-name">${g.name}</div>
-                    <div class="gift-price-ton">${g.priceTON} TON</div>
-                `;
-                strip.appendChild(div);
-            });
-        }
-        renderStrip();
+    let gifts = getRandomGifts(10);
+    let balance = 0;
+    let freeSpinAvailable = getStored('freeSpinAvailable', false);
+    let referralActivated = getStored('referralActivated', false);
+    let history = [];
+    let currentGift = null;
 
-        function copyTextToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => alert('Код скопирован!'))
-                    .catch(() => fallbackCopy(text));
-            } else {
-                fallbackCopy(text);
-            }
-        }
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try { document.execCommand('copy'); alert('Код скопирован!'); } 
-            catch { alert('Не удалось скопировать'); }
-            document.body.removeChild(textarea);
-        }
-
-        let animFrame;
-        let position = 0;
-        let velocity = 0;
-        let spinning = false;
-        const itemOuterWidth = 112;
-        const totalWidth = gifts.length * itemOuterWidth - 12;
-
-        function getSelectedGift() {
-            const items = document.querySelectorAll('.gift-item');
-            const container = document.querySelector('.gift-strip-container');
-            const containerRect = container.getBoundingClientRect();
-            const pointerX = containerRect.left + containerRect.width / 2;
-            let minDist = Infinity;
-            let selectedIndex = 0;
-            items.forEach((item, index) => {
-                const rect = item.getBoundingClientRect();
-                const itemCenter = rect.left + rect.width / 2;
-                const dist = Math.abs(itemCenter - pointerX);
-                if (dist < minDist) {
-                    minDist = dist;
-                    selectedIndex = index;
-                }
-            });
-            return gifts[selectedIndex];
-        }
-
-        function spinWheel(callback) {
-            if (spinning) return;
-            spinning = true;
-            velocity = 42;
-            const startTime = performance.now();
-
-            function animate() {
-                velocity *= 0.987;
-                position += velocity;
-                if (position > totalWidth) position -= totalWidth;
-                if (position < 0) position += totalWidth;
-                strip.style.transform = `translateX(${-position}px)`;
-
-                const elapsed = performance.now() - startTime;
-                if (elapsed < 6500 && velocity > 0.2) {
-                    animFrame = requestAnimationFrame(animate);
-                } else {
-                    spinning = false;
-                    cancelAnimationFrame(animFrame);
-                    const selected = getSelectedGift();
-                    document.querySelectorAll('.gift-item').forEach(el => el.classList.remove('selected'));
-                    const items = document.querySelectorAll('.gift-item');
-                    const idx = gifts.findIndex(g => g.id === selected.id);
-                    if (items[idx]) items[idx].classList.add('selected');
-                    if (callback) callback(selected);
-                }
-            }
-            animFrame = requestAnimationFrame(animate);
-        }
-
-        function updateBalance() {
-            document.getElementById('balance').innerHTML = `<i class="fas fa-star"></i> ${balance}`;
-        }
-
-        function addHistory(gift, status) {
-            const entryId = Date.now() + Math.random();
-            const date = new Date().toLocaleString('ru', { hour: '2-digit', minute: '2-digit' });
-            const entry = { id: entryId, giftId: gift.id, name: gift.name, date, status };
-            history.unshift(entry);
-            renderHistory();
-            return entryId;
-        }
-
-        function updateHistoryStatus(entryId, newStatus) {
-            const entry = history.find(h => h.id === entryId);
-            if (entry) entry.status = newStatus;
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const cont = document.getElementById('historyList');
-            cont.innerHTML = '';
-            history.slice(0, 15).forEach(h => {
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerHTML = `<span>${h.date}</span><span>${h.name}</span><span class="history-status status-${h.status.replace(' ','')}">${h.status}</span>`;
-                cont.appendChild(div);
-            });
-        }
-
-        function showResultModal(gift, source) {
-            const entryId = addHistory(gift, 'в наличии');
-            currentGift = { ...gift, source, entryId };
-            const card = document.getElementById('resultGiftCard');
-            card.innerHTML = `
-                <img src="${gift.image}" class="gift-image-large" onerror="this.src='https://picsum.photos/200/200'">
-                <div class="gift-name-big">${gift.name}</div>
-                <div class="gift-desc">${gift.desc}</div>
-                <div class="gift-price-big">
-                    <span class="price-ton">${gift.priceTON} TON</span>
-                    <span class="price-rub">≈ ${gift.priceRUB} ₽</span>
-                </div>
+    const strip = document.getElementById('giftStrip');
+    function renderStrip() {
+        strip.innerHTML = '';
+        gifts.forEach(g => {
+            const div = document.createElement('div');
+            div.className = `gift-item gift-${g.rarity}`;
+            div.dataset.id = g.id;
+            div.innerHTML = `
+                <img src="${g.image}" class="gift-image" onerror="this.src='https://picsum.photos/200/200'">
+                <div class="gift-name">${g.name}</div>
+                <div class="gift-price-ton">${g.priceTON} TON</div>
             `;
-            document.getElementById('sellBtn').disabled = (source === 'free');
-            document.getElementById('resultModal').classList.add('active');
+            strip.appendChild(div);
+        });
+    }
+    renderStrip();
+
+    function copyTextToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => alert('Код скопирован!'))
+                .catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
         }
+    }
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try { document.execCommand('copy'); alert('Код скопирован!'); } 
+        catch { alert('Не удалось скопировать'); }
+        document.body.removeChild(textarea);
+    }
 
-        window.closeResultModal = () => document.getElementById('resultModal').classList.remove('active');
+    let animFrame;
+    let position = 0;
+    let velocity = 0;
+    let spinning = false;
+    const itemOuterWidth = 112;
+    const totalWidth = gifts.length * itemOuterWidth - 12;
 
-        document.getElementById('spinStarsBtn').addEventListener('click', () => {
-            if (balance < 1) { alert('Купите звёзды через наш бот'); return; }
-            balance -= 1;
-            updateBalance();
-            spinWheel((gift) => showResultModal(gift, 'stars'));
-        });
-
-        document.getElementById('freeSpinBtn').addEventListener('click', () => {
-            if (!freeSpinAvailable || freeSpinUsed) return;
-            freeSpinUsed = true;
-            freeSpinAvailable = false;
-            document.getElementById('freeSpinBtn').disabled = true;
-            spinWheel((gift) => showResultModal(gift, 'free'));
-        });
-
-        document.getElementById('applyReferral').addEventListener('click', () => {
-            const code = document.getElementById('referralCode').value.trim();
-            if (code === 'FreeSpin' && !freeSpinAvailable && !freeSpinUsed) {
-                freeSpinAvailable = true;
-                document.getElementById('freeSpinBtn').disabled = false;
-                alert('Бесплатный спин активирован!');
-            } else if (code !== 'FreeSpin') {
-                alert('Неверный код');
-            } else if (freeSpinUsed) {
-                alert('Вы уже использовали бесплатный спин');
+    function getSelectedGift() {
+        const items = document.querySelectorAll('.gift-item');
+        const container = document.querySelector('.gift-strip-container');
+        const containerRect = container.getBoundingClientRect();
+        const pointerX = containerRect.left + containerRect.width / 2;
+        let minDist = Infinity;
+        let selectedIndex = 0;
+        items.forEach((item, index) => {
+            const rect = item.getBoundingClientRect();
+            const itemCenter = rect.left + rect.width / 2;
+            const dist = Math.abs(itemCenter - pointerX);
+            if (dist < minDist) {
+                minDist = dist;
+                selectedIndex = index;
             }
         });
+        return gifts[selectedIndex];
+    }
 
-        document.getElementById('sellBtn').addEventListener('click', () => {
-            if (!currentGift) return;
-            if (currentGift.source === 'free') { alert('Нельзя продать (бесплатный)'); return; }
-            balance += currentGift.priceTON;
-            updateBalance();
-            updateHistoryStatus(currentGift.entryId, 'продан');
-            closeResultModal();
-        });
+    function spinWheel(callback) {
+        if (spinning) return;
+        spinning = true;
+        velocity = 42;
+        const startTime = performance.now();
 
-        const withdrawModal = document.getElementById('withdrawModal');
-        const botPanel = document.getElementById('withdrawBotPanel');
-        const supportPanel = document.getElementById('supportFormPanel');
-        const withdrawCodeDiv = document.getElementById('withdrawCode');
+        function animate() {
+            velocity *= 0.987;
+            position += velocity;
+            if (position > totalWidth) position -= totalWidth;
+            if (position < 0) position += totalWidth;
+            strip.style.transform = `translateX(${-position}px)`;
 
-        document.getElementById('withdrawBtn').addEventListener('click', () => {
-            closeResultModal();
-            botPanel.style.display = 'none';
-            supportPanel.style.display = 'none';
-            withdrawModal.classList.add('active');
-        });
-
-        document.getElementById('withdrawBotOption').addEventListener('click', () => {
-            supportPanel.style.display = 'none';
-            if (currentGift) {
-                withdrawCodeDiv.innerText = currentGift.encryptedUrl;
-                botPanel.style.display = 'block';
-                updateHistoryStatus(currentGift.entryId, 'выводится');
+            const elapsed = performance.now() - startTime;
+            if (elapsed < 6500 && velocity > 0.2) {
+                animFrame = requestAnimationFrame(animate);
+            } else {
+                spinning = false;
+                cancelAnimationFrame(animFrame);
+                const selected = getSelectedGift();
+                document.querySelectorAll('.gift-item').forEach(el => el.classList.remove('selected'));
+                const items = document.querySelectorAll('.gift-item');
+                const idx = gifts.findIndex(g => g.id === selected.id);
+                if (items[idx]) items[idx].classList.add('selected');
+                if (callback) callback(selected);
             }
-        });
+        }
+        animFrame = requestAnimationFrame(animate);
+    }
 
-        withdrawCodeDiv.addEventListener('click', () => copyTextToClipboard(withdrawCodeDiv.innerText));
+    function updateBalance() {
+        document.getElementById('balance').innerHTML = `<i class="fas fa-star"></i> ${balance}`;
+    }
 
-        document.getElementById('withdrawSupportOption').addEventListener('click', () => {
-            botPanel.style.display = 'none';
-            document.getElementById('supportUsername').value = user.username || 'user';
-            supportPanel.style.display = 'block';
-            updateHistoryStatus(currentGift.entryId, 'выводится');
-        });
-
-        window.closeWithdrawModal = () => withdrawModal.classList.remove('active');
-
-        window.sendSupportRequest = () => { 
-            alert('Запрос отправлен в поддержку'); 
-            closeWithdrawModal(); 
-        };
-
-        updateBalance();
+    function addHistory(gift, status) {
+        const entryId = Date.now() + Math.random();
+        const date = new Date().toLocaleString('ru', { hour: '2-digit', minute: '2-digit' });
+        const entry = { id: entryId, giftId: gift.id, name: gift.name, date, status };
+        history.unshift(entry);
         renderHistory();
-    })();
+        return entryId;
+    }
+
+    function updateHistoryStatus(entryId, newStatus) {
+        const entry = history.find(h => h.id === entryId);
+        if (entry) entry.status = newStatus;
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const cont = document.getElementById('historyList');
+        cont.innerHTML = '';
+        history.slice(0, 15).forEach(h => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `<span>${h.date}</span><span>${h.name}</span><span class="history-status status-${h.status.replace(' ','')}">${h.status}</span>`;
+            cont.appendChild(div);
+        });
+    }
+
+    function showResultModal(gift, source) {
+        const entryId = addHistory(gift, 'в наличии');
+        currentGift = { ...gift, source, entryId };
+        const card = document.getElementById('resultGiftCard');
+        card.innerHTML = `
+            <img src="${gift.image}" class="gift-image-large" onerror="this.src='https://picsum.photos/200/200'">
+            <div class="gift-name-big">${gift.name}</div>
+            <div class="gift-desc">${gift.desc}</div>
+            <div class="gift-price-big">
+                <span class="price-ton">${gift.priceTON} TON</span>
+                <span class="price-rub">≈ ${gift.priceRUB} ₽</span>
+            </div>
+        `;
+        document.getElementById('sellBtn').disabled = (source === 'free');
+        document.getElementById('resultModal').classList.add('active');
+    }
+
+    window.closeResultModal = () => document.getElementById('resultModal').classList.remove('active');
+
+    document.getElementById('spinStarsBtn').addEventListener('click', () => {
+        if (balance < 1) { alert('Купите звёзды через наш бот'); return; }
+        balance -= 1;
+        updateBalance();
+        spinWheel((gift) => showResultModal(gift, 'stars'));
+    });
+
+    document.getElementById('freeSpinBtn').addEventListener('click', () => {
+        if (!freeSpinAvailable) return;
+        freeSpinAvailable = false;
+        setStored('freeSpinAvailable', false);
+        document.getElementById('freeSpinBtn').disabled = true;
+        spinWheel((gift) => showResultModal(gift, 'free'));
+    });
+
+    document.getElementById('applyReferral').addEventListener('click', () => {
+        if (referralActivated) {
+            alert('Вы уже активировали реферальный код');
+            return;
+        }
+        const code = document.getElementById('referralCode').value.trim();
+        if (code === 'FreeSpin') {
+            referralActivated = true;
+            freeSpinAvailable = true;
+            setStored('referralActivated', true);
+            setStored('freeSpinAvailable', true);
+            document.getElementById('freeSpinBtn').disabled = false;
+            alert('Бесплатный спин активирован!');
+        } else {
+            alert('Неверный код');
+        }
+    });
+
+    document.getElementById('sellBtn').addEventListener('click', () => {
+        if (!currentGift) return;
+        if (currentGift.source === 'free') { alert('Нельзя продать (бесплатный)'); return; }
+        balance += currentGift.priceTON;
+        updateBalance();
+        updateHistoryStatus(currentGift.entryId, 'продан');
+        closeResultModal();
+    });
+
+    const withdrawModal = document.getElementById('withdrawModal');
+    const botPanel = document.getElementById('withdrawBotPanel');
+    const supportPanel = document.getElementById('supportFormPanel');
+    const withdrawCodeDiv = document.getElementById('withdrawCode');
+
+    document.getElementById('withdrawBtn').addEventListener('click', () => {
+        closeResultModal();
+        botPanel.style.display = 'none';
+        supportPanel.style.display = 'none';
+        withdrawModal.classList.add('active');
+    });
+
+    document.getElementById('withdrawBotOption').addEventListener('click', () => {
+        supportPanel.style.display = 'none';
+        if (currentGift) {
+            withdrawCodeDiv.innerText = currentGift.encryptedUrl;
+            botPanel.style.display = 'block';
+            updateHistoryStatus(currentGift.entryId, 'выводится');
+        }
+    });
+
+    withdrawCodeDiv.addEventListener('click', () => copyTextToClipboard(withdrawCodeDiv.innerText));
+
+    document.getElementById('withdrawSupportOption').addEventListener('click', () => {
+        botPanel.style.display = 'none';
+        document.getElementById('supportUsername').value = user.username || 'user';
+        supportPanel.style.display = 'block';
+        updateHistoryStatus(currentGift.entryId, 'выводится');
+    });
+
+    window.closeWithdrawModal = () => withdrawModal.classList.remove('active');
+
+    window.sendSupportRequest = () => { 
+        alert('Запрос отправлен в поддержку'); 
+        closeWithdrawModal(); 
+    };
+
+    document.getElementById('freeSpinBtn').disabled = !freeSpinAvailable;
+    updateBalance();
+    renderHistory();
+})();
 </script>
 </body>
 </html>
