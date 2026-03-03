@@ -631,6 +631,7 @@
     let referralActivated = getStored('referralActivated', false);
     let history = [];
     let currentGift = null;
+    let spinning = false;
 
     const strip = document.getElementById('giftStrip');
     function renderStrip() {
@@ -672,7 +673,6 @@
     let animFrame;
     let position = 0;
     let velocity = 0;
-    let spinning = false;
     const itemOuterWidth = 112;
     const totalWidth = gifts.length * itemOuterWidth - 12;
 
@@ -775,6 +775,7 @@
     window.closeResultModal = () => document.getElementById('resultModal').classList.remove('active');
 
     document.getElementById('spinStarsBtn').addEventListener('click', () => {
+        if (spinning) return;
         if (balance < 1) { alert('Купите звёзды через наш бот'); return; }
         balance -= 1;
         updateBalance();
@@ -782,6 +783,7 @@
     });
 
     document.getElementById('freeSpinBtn').addEventListener('click', () => {
+        if (spinning) return;
         if (!freeSpinAvailable) return;
         freeSpinAvailable = false;
         setStored('freeSpinAvailable', false);
@@ -801,6 +803,7 @@
             setStored('referralActivated', true);
             setStored('freeSpinAvailable', true);
             document.getElementById('freeSpinBtn').disabled = false;
+            document.getElementById('referralCode').value = '';
             alert('Бесплатный спин активирован!');
         } else {
             alert('Неверный код');
@@ -809,6 +812,11 @@
 
     document.getElementById('sellBtn').addEventListener('click', () => {
         if (!currentGift) return;
+        const historyEntry = history.find(h => h.id === currentGift.entryId);
+        if (!historyEntry || historyEntry.status !== 'в наличии') {
+            alert('Этот подарок уже не в наличии');
+            return;
+        }
         if (currentGift.source === 'free') { alert('Нельзя продать (бесплатный)'); return; }
         balance += currentGift.priceTON;
         updateBalance();
@@ -822,6 +830,12 @@
     const withdrawCodeDiv = document.getElementById('withdrawCode');
 
     document.getElementById('withdrawBtn').addEventListener('click', () => {
+        if (!currentGift) return;
+        const historyEntry = history.find(h => h.id === currentGift.entryId);
+        if (!historyEntry || historyEntry.status !== 'в наличии') {
+            alert('Этот подарок уже не в наличии');
+            return;
+        }
         closeResultModal();
         botPanel.style.display = 'none';
         supportPanel.style.display = 'none';
@@ -829,26 +843,27 @@
     });
 
     document.getElementById('withdrawBotOption').addEventListener('click', () => {
+        if (!currentGift) return;
         supportPanel.style.display = 'none';
-        if (currentGift) {
-            withdrawCodeDiv.innerText = currentGift.encryptedUrl;
-            botPanel.style.display = 'block';
-            updateHistoryStatus(currentGift.entryId, 'выводится');
-        }
+        withdrawCodeDiv.innerText = currentGift.encryptedUrl;
+        botPanel.style.display = 'block';
+        updateHistoryStatus(currentGift.entryId, 'выводится');
     });
 
     withdrawCodeDiv.addEventListener('click', () => copyTextToClipboard(withdrawCodeDiv.innerText));
 
     document.getElementById('withdrawSupportOption').addEventListener('click', () => {
+        if (!currentGift) return;
         botPanel.style.display = 'none';
         document.getElementById('supportUsername').value = user.username || 'user';
         supportPanel.style.display = 'block';
-        updateHistoryStatus(currentGift.entryId, 'выводится');
     });
 
     window.closeWithdrawModal = () => withdrawModal.classList.remove('active');
 
     window.sendSupportRequest = () => { 
+        if (!currentGift) return;
+        updateHistoryStatus(currentGift.entryId, 'выводится');
         alert('Запрос отправлен в поддержку'); 
         closeWithdrawModal(); 
     };
