@@ -528,7 +528,7 @@
             
             <div class="withdraw-option" id="withdrawSupportOption">
                 <h3><i class="fas fa-headset"></i> Через техподдержку (до 7 дней)</h3>
-                <p>Обработка запроса вручную. Пожалуйста, не меняйте username</p>
+                <p>Обработка запроса вручную. Пожалуйста, укажите ваш username для связи</p>
             </div>
 
             <div id="withdrawBotPanel" class="withdraw-panel" style="display: none;">
@@ -541,7 +541,7 @@
             <div id="supportFormPanel" class="withdraw-panel" style="display: none;">
                 <h4><i class="fas fa-envelope"></i> Заявка в поддержку</h4>
                 <div class="support-form">
-                    <input type="text" id="supportUsername" readonly>
+                    <input type="text" id="supportUsername" placeholder="Ваш username (например, @nickname)">
                     <p style="color: #8e8e93; font-size: 12px; margin: 8px 0;">Наш менеджер свяжется с вами в течение 7 дней. Проверьте, что вам могут бесплатно писать незнакомцы</p>
                     <button class="btn btn-primary" onclick="sendSupportRequest()"><i class="fas fa-paper-plane"></i> Отправить</button>
                 </div>
@@ -571,21 +571,21 @@
     const setStored = (key, val) => localStorage.setItem(storageKey(key), JSON.stringify(val));
 
     const allGifts = [
-        { id: 1, name: 'Pet Snake', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/rwS4cbpb/Bez-nazvania141-20260302224345.jpg', desc: 'Домашняя змея', encryptedUrl: btoa('t.me/nft/PetSnake-74731') },
-        { id: 2, name: 'Instant Ramen', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/Ghn43rfB/Bez-nazvania141-20260302013354.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-271878') },
-        { id: 3, name: 'Tama Gadget', priceTON: 12, priceRUB: 1125, rarity: 'epic', image: 'https://i.postimg.cc/hj9P6J1Q/Bez-nazvania141-20260302225039.jpg', desc: 'Тамагочи', encryptedUrl: btoa('t.me/nft/TamaGadget-57653') },
-        { id: 4, name: 'Homemade Cake', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/QxrsvxFk/Bez-nazvania141-20260302230958.jpg', desc: 'Домашний пирог', encryptedUrl: btoa('t.me/nft/HomemadeCake-72304') },
-        { id: 5, name: 'Whip Cupcake', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 'https://i.postimg.cc/DZ4VSRMy/Bez-nazvania141-20260302233926.jpg', desc: 'Кекс', encryptedUrl: btoa('t.me/nft/WhipCupcake-235234') },
-        { id: 6, name: 'Fresh Socks', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/KcQ7K4tc/Bez-nazvania141-20260302234317.jpg', desc: 'Свежие носки', encryptedUrl: btoa('t.me/nft/FreshSocks-32835') },
-        { id: 7, name: 'Pretty Posy', priceTON: 9, priceRUB: 844, rarity: 'rare', image: 'https://i.postimg.cc/mk6RbhWy/Bez-nazvania141-20260303135732.jpg', desc: 'Симпатичный букет', encryptedUrl: btoa('t.me/nft/PrettyPosy-103707') },
-        { id: 8, name: 'Ice Cream', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/GtSBZcMJ/Bez-nazvania141-20260303140647.jpg', desc: 'Мороженое', encryptedUrl: btoa('t.me/nft/IceCream-175253') },
-        { id: 9, name: 'Jester Hat', priceTON: 15, priceRUB: 1407, rarity: 'epic', image: 'https://i.postimg.cc/SsYCkYMT/Screenshot-20260303-141822.png', desc: 'Шутовская шляпа', encryptedUrl: btoa('t.me/nft/JesterHat-70359') },
-        { id: 10, name: 'Spring Basket', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/9MmKkVwR/Bez-nazvania141-20260303142629.jpg', desc: 'Пружинная корзина', encryptedUrl: btoa('t.me/nft/SpringBasket-45268') },
-        { id: 11, name: 'BDay Candle', priceTON: 6, priceRUB: 562, rarity: 'rare', image: 'https://i.postimg.cc/QMZG1bv5/Bez-nazvania141-20260303173358.jpg', desc: 'Свеча на день рождения', encryptedUrl: btoa('t.me/nft/BDayCandle-177607') },
-        { id: 12, name: 'Faith Amulet', priceTON: 10, priceRUB: 938, rarity: 'epic', image: 'https://i.postimg.cc/wMy0WKmf/Bez-nazvania141-20260303173719.jpg', desc: 'Амулет веры', encryptedUrl: btoa('t.me/nft/FaithAmulet-131') },
-        { id: 13, name: 'Candy Cane', priceTON: 4, priceRUB: 375, rarity: 'common', image: 'https://i.postimg.cc/C1yGFZBm/Bez-nazvania141-20260303174220.jpg', desc: 'Карамельная трость', encryptedUrl: btoa('t.me/nft/CandyCane-69627') },
-        { id: 14, name: 'Instant Ramen', priceTON: 5, priceRUB: 469, rarity: 'common', image: 'https://i.postimg.cc/598V9DGm/Bez-nazvania141-20260303175116.jpg', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-363195') },
-        { id: 15, name: 'Jolly Chimp', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 'https://i.postimg.cc/MG1Dfb8n/Bez-nazvania141-20260303175440.jpg', desc: 'Веселый шимпанзе', encryptedUrl: btoa('t.me/nft/JollyChimp-14158') }
+        { id: 1, name: 'Pet Snake', priceTON: 5, priceRUB: 469, rarity: 'common', image: 't.me/nft/PetSnake-74731', desc: 'Домашняя змея', encryptedUrl: btoa('t.me/nft/PetSnake-74731') },
+        { id: 2, name: 'Instant Ramen', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 't.me/nft/InstantRamen-271878', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-271878') },
+        { id: 3, name: 'Tama Gadget', priceTON: 12, priceRUB: 1125, rarity: 'epic', image: 't.me/nft/TamaGadget-57653', desc: 'Тамагочи', encryptedUrl: btoa('t.me/nft/TamaGadget-57653') },
+        { id: 4, name: 'Homemade Cake', priceTON: 4, priceRUB: 375, rarity: 'common', image: 't.me/nft/HomemadeCake-72304', desc: 'Домашний пирог', encryptedUrl: btoa('t.me/nft/HomemadeCake-72304') },
+        { id: 5, name: 'Whip Cupcake', priceTON: 7, priceRUB: 657, rarity: 'rare', image: 't.me/nft/WhipCupcake-235234', desc: 'Кекс', encryptedUrl: btoa('t.me/nft/WhipCupcake-235234') },
+        { id: 6, name: 'Fresh Socks', priceTON: 4, priceRUB: 375, rarity: 'common', image: 't.me/nft/FreshSocks-32835', desc: 'Свежие носки', encryptedUrl: btoa('t.me/nft/FreshSocks-32835') },
+        { id: 7, name: 'Pretty Posy', priceTON: 9, priceRUB: 844, rarity: 'rare', image: 't.me/nft/PrettyPosy-103707', desc: 'Симпатичный букет', encryptedUrl: btoa('t.me/nft/PrettyPosy-103707') },
+        { id: 8, name: 'Ice Cream', priceTON: 5, priceRUB: 469, rarity: 'common', image: 't.me/nft/IceCream-175253', desc: 'Мороженое', encryptedUrl: btoa('t.me/nft/IceCream-175253') },
+        { id: 9, name: 'Jester Hat', priceTON: 15, priceRUB: 1407, rarity: 'epic', image: 't.me/nft/JesterHat-70359', desc: 'Шутовская шляпа', encryptedUrl: btoa('t.me/nft/JesterHat-70359') },
+        { id: 10, name: 'Spring Basket', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 't.me/nft/SpringBasket-45268', desc: 'Пружинная корзина', encryptedUrl: btoa('t.me/nft/SpringBasket-45268') },
+        { id: 11, name: 'BDay Candle', priceTON: 6, priceRUB: 562, rarity: 'rare', image: 't.me/nft/BDayCandle-177607', desc: 'Свеча на день рождения', encryptedUrl: btoa('t.me/nft/BDayCandle-177607') },
+        { id: 12, name: 'Faith Amulet', priceTON: 10, priceRUB: 938, rarity: 'epic', image: 't.me/nft/FaithAmulet-131', desc: 'Амулет веры', encryptedUrl: btoa('t.me/nft/FaithAmulet-131') },
+        { id: 13, name: 'Candy Cane', priceTON: 4, priceRUB: 375, rarity: 'common', image: 't.me/nft/CandyCane-69627', desc: 'Карамельная трость', encryptedUrl: btoa('t.me/nft/CandyCane-69627') },
+        { id: 14, name: 'Instant Ramen', priceTON: 5, priceRUB: 469, rarity: 'common', image: 't.me/nft/InstantRamen-363195', desc: 'Лапша быстрого приготовления', encryptedUrl: btoa('t.me/nft/InstantRamen-363195') },
+        { id: 15, name: 'Jolly Chimp', priceTON: 20, priceRUB: 1876, rarity: 'legendary', image: 't.me/nft/JollyChimp-14158', desc: 'Веселый шимпанзе', encryptedUrl: btoa('t.me/nft/JollyChimp-14158') }
     ];
 
     function getRandomGifts(count) {
@@ -596,6 +596,7 @@
     let gifts = getRandomGifts(10);
     let balance = getStored('balance', 0);
     let freeSpinAvailable = getStored('freeSpinAvailable', false);
+    let referralActivated = getStored('referralActivated', false);
     let history = getStored('history', []);
     let currentGift = null;
     let spinning = false;
@@ -639,7 +640,6 @@
 
     let animFrame;
     let position = 0;
-    let velocity = 0;
     const itemOuterWidth = 112;
     const totalWidth = gifts.length * itemOuterWidth - 12;
 
@@ -659,14 +659,26 @@
                 selectedIndex = index;
             }
         });
-        return gifts[selectedIndex];
+        return { gift: gifts[selectedIndex], index: selectedIndex };
+    }
+
+    function centerOnSelectedIndex(index) {
+        const container = document.querySelector('.gift-strip-container');
+        const containerWidth = container.clientWidth;
+        const targetPosition = 20 + index * itemOuterWidth + 50 - containerWidth / 2;
+        let newPos = targetPosition;
+        if (newPos < 0) newPos += totalWidth;
+        if (newPos > totalWidth) newPos -= totalWidth;
+        position = newPos;
+        strip.style.transform = `translateX(${-position}px)`;
     }
 
     function spinWheel(callback) {
         if (spinning) return;
         spinning = true;
-        velocity = 42;
+        let velocity = 42;
         const startTime = performance.now();
+        document.querySelectorAll('.gift-item').forEach(el => el.classList.remove('selected'));
 
         function animate() {
             velocity *= 0.987;
@@ -681,12 +693,11 @@
             } else {
                 spinning = false;
                 cancelAnimationFrame(animFrame);
-                const selected = getSelectedGift();
-                document.querySelectorAll('.gift-item').forEach(el => el.classList.remove('selected'));
+                const { gift, index } = getSelectedGift();
+                centerOnSelectedIndex(index);
                 const items = document.querySelectorAll('.gift-item');
-                const idx = gifts.findIndex(g => g.id === selected.id);
-                if (items[idx]) items[idx].classList.add('selected');
-                if (callback) callback(selected);
+                if (items[index]) items[index].classList.add('selected');
+                if (callback) callback(gift);
             }
         }
         animFrame = requestAnimationFrame(animate);
@@ -770,11 +781,13 @@
     document.getElementById('applyReferral').addEventListener('click', () => {
         const code = document.getElementById('referralCode').value.trim();
         if (code === 'FreeSpin') {
-            if (freeSpinAvailable) {
-                alert('Бесплатный спин уже активирован');
+            if (referralActivated) {
+                alert('Вы уже активировали реферальный код на этом аккаунте');
                 return;
             }
+            referralActivated = true;
             freeSpinAvailable = true;
+            setStored('referralActivated', true);
             setStored('freeSpinAvailable', true);
             document.getElementById('freeSpinBtn').disabled = false;
             document.getElementById('referralCode').value = '';
@@ -829,7 +842,7 @@
     document.getElementById('withdrawSupportOption').addEventListener('click', () => {
         if (!currentGift) return;
         botPanel.style.display = 'none';
-        document.getElementById('supportUsername').value = user.username || 'user';
+        document.getElementById('supportUsername').value = '';
         supportPanel.style.display = 'block';
     });
 
@@ -837,6 +850,11 @@
 
     window.sendSupportRequest = () => { 
         if (!currentGift) return;
+        const username = document.getElementById('supportUsername').value.trim();
+        if (!username) {
+            alert('Пожалуйста, укажите ваш username');
+            return;
+        }
         updateHistoryStatus(currentGift.entryId, 'выводится');
         alert('Запрос отправлен в поддержку'); 
         closeWithdrawModal(); 
