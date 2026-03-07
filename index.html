@@ -831,16 +831,44 @@
 
     document.getElementById('withdrawBotOption').addEventListener('click', () => {
         if (!currentGift) return;
+        const historyEntry = history.find(h => h.id === currentGift.entryId);
+        if (!historyEntry || historyEntry.status !== 'в наличии') {
+            alert('Подарок уже не доступен для вывода');
+            withdrawModal.classList.remove('active');
+            return;
+        }
         supportPanel.style.display = 'none';
         withdrawCodeDiv.innerText = currentGift.encryptedUrl;
         botPanel.style.display = 'block';
-        updateHistoryStatus(currentGift.entryId, 'выводится');
     });
 
-    withdrawCodeDiv.addEventListener('click', () => copyTextToClipboard(withdrawCodeDiv.innerText));
+    withdrawCodeDiv.addEventListener('click', function() {
+        copyTextToClipboard(withdrawCodeDiv.innerText);
+        if (currentGift) {
+            const historyEntry = history.find(h => h.id === currentGift.entryId);
+            if (historyEntry && historyEntry.status === 'в наличии') {
+                updateHistoryStatus(currentGift.entryId, 'выводится');
+            }
+        }
+    });
+
+    document.querySelector('#withdrawBotPanel a.btn').addEventListener('click', function() {
+        if (currentGift) {
+            const historyEntry = history.find(h => h.id === currentGift.entryId);
+            if (historyEntry && historyEntry.status === 'в наличии') {
+                updateHistoryStatus(currentGift.entryId, 'выводится');
+            }
+        }
+    });
 
     document.getElementById('withdrawSupportOption').addEventListener('click', () => {
         if (!currentGift) return;
+        const historyEntry = history.find(h => h.id === currentGift.entryId);
+        if (!historyEntry || historyEntry.status !== 'в наличии') {
+            alert('Подарок уже не доступен для вывода');
+            withdrawModal.classList.remove('active');
+            return;
+        }
         botPanel.style.display = 'none';
         document.getElementById('supportUsername').value = '';
         supportPanel.style.display = 'block';
@@ -850,6 +878,12 @@
 
     window.sendSupportRequest = () => { 
         if (!currentGift) return;
+        const historyEntry = history.find(h => h.id === currentGift.entryId);
+        if (!historyEntry || historyEntry.status !== 'в наличии') {
+            alert('Подарок уже не доступен для вывода');
+            closeWithdrawModal();
+            return;
+        }
         const username = document.getElementById('supportUsername').value.trim();
         if (!username) {
             alert('Пожалуйста, укажите ваш username');
@@ -863,6 +897,10 @@
     document.getElementById('freeSpinBtn').disabled = !freeSpinAvailable;
     updateBalance();
     renderHistory();
+
+    const { index } = getSelectedGift();
+    centerOnSelectedIndex(index);
+    document.querySelectorAll('.gift-item')[index].classList.add('selected');
 })();
 </script>
 </body>
