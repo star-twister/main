@@ -555,14 +555,25 @@
 <script>
 (function() {
     const tg = window.Telegram?.WebApp || { 
-        initDataUnsafe: { user: { id: 12345, first_name: 'Игрок', username: '@player', photo_url: '' } },
+        initDataUnsafe: { user: { } },
         expand: function() {}
     };
     tg.expand();
     if (tg.ready) tg.ready();
-    const user = tg.initDataUnsafe.user || { id: 0, first_name: 'Гость', username: '@guest', photo_url: '' };
+    const telegramUser = tg.initDataUnsafe.user;
+    
+    let userId;
+    if (telegramUser && telegramUser.id) {
+        userId = telegramUser.id;
+    } else {
+        let tempId = localStorage.getItem('temp_user_id');
+        if (!tempId) {
+            tempId = 'temp_' + Math.random().toString(36).substring(2) + Date.now();
+            localStorage.setItem('temp_user_id', tempId);
+        }
+        userId = tempId;
+    }
 
-    const userId = user.id || 'guest';
     const storageKey = (key) => `startwister_${userId}_${key}`;
     const getStored = (key, def) => {
         try { return JSON.parse(localStorage.getItem(storageKey(key))) ?? def; } 
